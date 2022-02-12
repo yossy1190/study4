@@ -44,7 +44,7 @@ def main():
         for item in csv.reader(lists):
             items_in.append(item)
 
-    # for文で、インスタンス化を繰り返し処理する。
+    # for文で、インスタンス化を繰り返し処理する。item_mastersはItemクラスを要素に持つ配列。
     item_masters=[]    
     for item_in in items_in:
         item_masters.append(Item(*item_in))
