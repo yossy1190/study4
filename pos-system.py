@@ -1,6 +1,7 @@
+
+import csv
+
 ### 商品クラス
-
-
 class Item:
 
     def __init__(self,item_code,item_name,price):
@@ -18,26 +19,37 @@ class Order:
         self.item_order_list=[]
         self.item_masters=item_masters
     
-
-        
-   
     def print_order_item(self,item_code):
         # インスタンスのitem_mastersから、１つずつ値を取り出し、引数の商品コードと符合する商品を探す。
         # その商品の、ID・名前・価格をprintメソッドで表示させる。
         for master in self.item_masters:
             if item_code==master.item_code:
-                print("商品コード:{},商品名:{},価格:{}".format(master.item_code,master.item_name,master.price))
+                print(f"商品コード:{master.item_code},商品名:{master.item_name},価格:{master.price}")
 
 
 ### メイン処理　関数main
 def main():
+   
 
-    # この店の商品(item)一覧情報をここで取り込み。
-    # ここではまだorderクラスはインスタンス化していない。
-    item_masters=[]
-    item_masters.append(Item("001","りんご",100))
-    item_masters.append(Item("002","なし",120))
-    item_masters.append(Item("003","みかん",150))
+    # 二次元配列用の箱を準備
+    items_in=[]
+   
+    # 商品マスタをcsvで読み込みできるようにする！
+    #csvファイルのデータを読み取る。変数listsとして呼び出し可能にしておく。
+    # headerが邪魔なので、２行目から読み取る
+    with open("item.csv","r",encoding="Shift-JIS") as lists:
+        header=next(csv.reader(lists))
+        
+    # 変数listsから値を取り出し変数itemに格納。二次元配列items_inの中にappendしていく。
+        for item in csv.reader(lists):
+            items_in.append(item)
+
+    # for文で、インスタンス化を繰り返し処理する。
+    item_masters=[]    
+    for item_in in items_in:
+        item_masters.append(Item(*item_in))
+
+
 
     # orderクラスをインスタンス化。Order_Item_Infoメソッドを使えるようにする。
     # 商品コードを引数入力したら、ID・名前・価格をprintメソッドで表示させる。
