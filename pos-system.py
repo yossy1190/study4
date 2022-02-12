@@ -28,10 +28,10 @@ class Order:
         for master in self.item_masters:
             if item_code==master.item_code:
                 print(f"商品コード:{master.item_code},商品名:{master.item_name},価格:{master.price}")
-                # 個数{master.num}
+
                 
     def add_order_list(self):
-        self.item_order_list=[]
+        # item_order_listにinputの内容を格納していく。
         while True:
             val=input("商品コードを入力(001～999)。Enterのみで精算します。:")         
             if val:
@@ -61,9 +61,8 @@ def main():
         item_masters.append(Item(*item_in))
 
     # orderクラスをインスタンス化。Order_Item_Infoメソッドを使えるようにする。
-    # 商品コードを引数入力したら、ID・名前・価格をprintメソッドで表示させる。
+    # order_listへの追加は、Orderクラスにメソッドとして記入。mainでは、メソッド呼び出しのみにする。
     order=Order(item_masters)
-
     order.add_order_list()
     
 
