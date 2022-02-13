@@ -1,6 +1,7 @@
 
 import csv
 
+
 ### 商品クラス
 class Item:
 
@@ -8,39 +9,38 @@ class Item:
         self.item_code=item_code
         self.item_name=item_name
         self.price=price
-        # self.num=num
-
 
     def getitem_code(self):
         return self.item_code
 
 ### オーダークラス
 class Order:
-    # コンストラクタ　
+    # item_mastersの中には、CSVで読み込んだ、code,name,priceが入る
     def __init__(self,item_masters):
         self.item_order_list=[]
+        self.item_amount_list=[]
         self.item_masters=item_masters
 
-    
-    def print_order_item(self,item_code):
-        # インスタンスのitem_mastersから、１つずつ値を取り出し、引数の商品コードと符合する商品を探す。
-        # その商品の、ID・名前・価格をprintメソッドで表示させる。
-        for master in self.item_masters:
-            if item_code==master.item_code:
-                print(f"商品コード:{master.item_code},商品名:{master.item_name},価格:{master.price}")
-
-                
     def add_order_list(self):
         # item_order_listにinputの内容を格納していく。
         while True:
-            val=input("商品コードを入力(001～999)。Enterのみで精算します。:")         
+            val=input("商品コードを入力(001～999)。Enterのみで精算します。>>>") 
             if val:
-                self.item_order_list.append(val)           
+                self.item_order_list.append(val)
+                amt=input("商品個数はいくつですか？>>>")        
+                self.item_amount_list.append(amt)           
             else:
                 break
-        for item in self.item_order_list:
-            self.print_order_item(item)
-        # return order_list
+            
+            
+        # 入力された、商品コードと商品個数を１つずつ取り出す。print_order_item関数に当てる
+        for item_code,amount in zip(self.item_order_list,self.item_amount_list):
+            self.print_order_item(item_code,amount)
+
+    def print_order_item(self,item_code,amount):
+            # 入力されたitem_codeがitem_mastersに含まれているか確認。
+            if item_code in self.item_masters.item_code:
+                print(f"商品コード:{self.item_masters.item_code},商品名:{self.item_masters.item_name},価格:{self.item_masters.price}円,個数{amount}個")
     
 ### メイン処理　関数main
 def main():
@@ -56,6 +56,7 @@ def main():
         header=next(csv.reader(lists))
         for list in csv.reader(lists):
             items_in.append(list)
+            
     item_masters=[]    
     for item_in in items_in:
         item_masters.append(Item(*item_in))
