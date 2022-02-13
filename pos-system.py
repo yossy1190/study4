@@ -38,9 +38,11 @@ class Order:
             self.print_order_item(item_code,amount)
 
     def print_order_item(self,item_code,amount):
+            # item_mastersから１つのitemを取り出し、item_code,item_name,priceにアクセスできるようにする。
             # 入力されたitem_codeがitem_mastersに含まれているか確認。
-            if item_code in self.item_masters.item_code:
-                print(f"商品コード:{self.item_masters.item_code},商品名:{self.item_masters.item_name},価格:{self.item_masters.price}円,個数{amount}個")
+            for item in self.item_masters:
+                if item_code in item.item_code:
+                    print(f"商品コード:{item.item_code},商品名:{item.item_name},価格:{item.price}円,個数{amount}個")
     
 ### メイン処理　関数main
 def main():
