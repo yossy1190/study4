@@ -20,6 +20,8 @@ class Order:
         self.item_order_list=[]
         self.item_amount_list=[]
         self.item_masters=item_masters
+        self.subtotal=0
+        self.alltotal=0
 
     def add_order_list(self):
         # item_order_listにinputの内容を格納していく。
@@ -34,15 +36,30 @@ class Order:
             
             
         # 入力された、商品コードと商品個数を１つずつ取り出す。print_order_item関数に当てる
+        
         for item_code,amount in zip(self.item_order_list,self.item_amount_list):
             self.print_order_item(item_code,amount)
+            self.alltotal=self.alltotal+self.subtotal
+            self.subtotal=0
+        print(f"会計金額:{self.alltotal}円")
+            
+            
+            
 
     def print_order_item(self,item_code,amount):
             # item_mastersから１つのitemを取り出し、item_code,item_name,priceにアクセスできるようにする。
             # 入力されたitem_codeがitem_mastersに含まれているか確認。
+            
             for item in self.item_masters:
+                
                 if item_code in item.item_code:
+                    
+                    self.subtotal = int(item.price)*int(amount)
                     print(f"商品コード:{item.item_code},商品名:{item.item_name},価格:{item.price}円,個数{amount}個")
+            print(f"小計:{self.subtotal}円")
+            
+        
+        
     
 ### メイン処理　関数main
 def main():
