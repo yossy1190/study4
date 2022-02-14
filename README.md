@@ -1,23 +1,17 @@
-課題４ー５
+課題４ー６
 
 【課題目標】
-オーダー登録した商品の一覧（商品名、価格）を表示し、かつ合計金額、個数を表示できるようにしてください
+お客様からのお預かり金額を入力しお釣りを計算する
 
 【行ったこと】
-・メンバ変数として、subtotal（小計）、allttotal（合計）を宣言
+・Orderclass内に、pay_total_moneyメソッドを追加。
+→inputで預入金額を入力させる。pay_moneyに格納。
+→add_order_listメソッドで計算したalltotalからpay_moneyを差し引き、change_moneyに格納。
+→printで、change_moneyを含めて、メッセージを出力
 
-・関数print_order_itemにて、「inputで返されたamount」と「マスタ登録されている価格」から、小計を求めるコードを追加、関数printで小計を出力
-・関数add_order_listにて、subtotalをalltotalに加えていく、最後にsubtotalをリセット
-→次のfor文ループへ
-→for文終了後、合計金額をprint
+・pay_total_moneyをmain関数で実行
 
 【作業の際に困ったこと】
-・subtotalの初期値をnoneとすると、エラーで返された。
-→self.subtotal=0にすると、解決した。
-
-・subtotalの値がリセットされない
-→self.subtotal=0を記述してリセット（ほかのスマートな記述方法は探しきれなかった）
-
-・それぞれの関数で変数を定義しても、うまく呼び出せなかった。
-→グローバル変数とローカル変数の違い
-→クラスのメンバ変数として解決
+・メソッドを定義する際に、どのタイミングでselfを使うのか、インスタンスの引数とするのか、
+　少し混乱してしまったた。
+ →再度復習。Class内で定義している変数を呼び出すときは、selfをつける？
