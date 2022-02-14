@@ -22,19 +22,19 @@ class Order:
         self.item_masters=item_masters
         self.subtotal=0
         self.alltotal=0
+        self.pay_money=0
+        self.change_money=0
 
     def add_order_list(self):
         # item_order_listにinputの内容を格納していく。
         while True:
-            val=input("商品コードを入力(001～999)。Enterのみで精算します。>>>") 
+            val=input("商品コード(001～999)を入力してください。注文終了時はEnterキーのみで精算します。>>>") 
             if val:
                 self.item_order_list.append(val)
                 amt=input("商品個数はいくつですか？>>>")        
                 self.item_amount_list.append(amt)           
             else:
-                break
-            
-            
+                break     
         # 入力された、商品コードと商品個数を１つずつ取り出す。print_order_item関数に当てる
         
         for item_code,amount in zip(self.item_order_list,self.item_amount_list):
@@ -44,8 +44,6 @@ class Order:
         print(f"会計金額:{self.alltotal}円")
             
             
-            
-
     def print_order_item(self,item_code,amount):
             # item_mastersから１つのitemを取り出し、item_code,item_name,priceにアクセスできるようにする。
             # 入力されたitem_codeがitem_mastersに含まれているか確認。
@@ -59,6 +57,10 @@ class Order:
             print(f"小計:{self.subtotal}円")
             
         
+    def pay_total_money(self):
+        pay_money=int(input(f"お会計は{self.alltotal}円です。預け入れ金額を入力してください(円不要)。>>>"))
+        change_money=pay_money-int(self.alltotal)
+        print(f"お支払いありがとうございます。お釣りは{change_money}円です。ご来店ありがとうございました!")
         
     
 ### メイン処理　関数main
@@ -84,7 +86,7 @@ def main():
     # order_listへの追加は、Orderクラスにメソッドとして記入。mainでは、メソッド呼び出しのみにする。
     order=Order(item_masters)
     order.add_order_list()
-    
+    order.pay_total_money()
 
     
 if __name__ == "__main__":
