@@ -1,6 +1,7 @@
 
 import csv
-
+import datetime
+from pathlib import Path
 
 ### 商品クラス
 class Item:
@@ -24,6 +25,8 @@ class Order:
         self.alltotal=0
         self.pay_money=0
         self.change_money=0
+        self.pay_money=0
+        self.change_money=0
 
     def add_order_list(self):
         # item_order_listにinputの内容を格納していく。
@@ -37,31 +40,45 @@ class Order:
                 break     
         # 入力された、商品コードと商品個数を１つずつ取り出す。print_order_item関数に当てる
         
-        for item_code,amount in zip(self.item_order_list,self.item_amount_list):
-            self.print_order_item(item_code,amount)
+        for val_item_code,amount in zip(self.item_order_list,self.item_amount_list):
+            self.print_order_item(val_item_code,amount)
             self.alltotal=self.alltotal+self.subtotal
             self.subtotal=0
-        print(f"会計金額:{self.alltotal}円")
+        print(f"会計金額:{int(self.alltotal):,}円")
+        
             
             
-    def print_order_item(self,item_code,amount):
+    def print_order_item(self,val_item_code,amount):
             # item_mastersから１つのitemを取り出し、item_code,item_name,priceにアクセスできるようにする。
             # 入力されたitem_codeがitem_mastersに含まれているか確認。
             
             for item in self.item_masters:
                 
-                if item_code in item.item_code:
+                if val_item_code in item.item_code:
                     
                     self.subtotal = int(item.price)*int(amount)
-                    print(f"商品コード:{item.item_code},商品名:{item.item_name},価格:{item.price}円,個数{amount}個")
-            print(f"小計:{self.subtotal}円")
+                    print(f"商品コード:{item.item_code},商品名:{item.item_name},価格:{int(item.price):,}円,個数{amount}個")
+            print(f"小計:{int(self.subtotal):,}円")
             
         
     def pay_total_money(self):
-        pay_money=int(input(f"お会計は{self.alltotal}円です。預け入れ金額を入力してください(円不要)。>>>"))
-        change_money=pay_money-int(self.alltotal)
-        print(f"お支払いありがとうございます。お釣りは{change_money}円です。ご来店ありがとうございました!")
         
+        self.pay_money=int(input(f"お会計は{int(self.alltotal):,}円です。預け入れ金額を入力してください(円不要)。>>>"))
+        self.change_money=self.pay_money-int(self.alltotal)
+        print(f"お支払いありがとうございます。お釣りは{self.change_money:,}円です。本日はご来店ありがとうございました!")
+       
+    
+    def print_receipt(self):
+        payment_date=datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        
+        with open("receipt.txt","w",encoding="utf-8") as f:
+            f.write(f"来店日時:{payment_date}\n")
+            l=len(self.item_order_list)
+            for i in range(l):
+                f.write(f"商品コード:{self.item_order_list[i]},商品名:{self.item_masters[i].item_name},価格:{self.item_masters[i].price}円,個数{self.item_amount_list[i]}個\n")
+            f.write(f"合計金額:{int(self.alltotal):,}円\nお預かり金額:{int(self.pay_money):,}円\n")
+            f.write(f"お釣り:{int(self.change_money):,}円\n")
+            f.write("本日はご来店ありがとうございました！")
     
 ### メイン処理　関数main
 def main():
@@ -69,10 +86,6 @@ def main():
     # マスター登録。二次元配列用の箱を準備
     items_in=[]
     
-    # csvファイルのデータを読み取る。変数listsとして呼び出し可能にしておく。
-    # headerが邪魔なので、２行目から読み取る
-    # 変数listsから値を取り出し変数itemに格納。二次元配列items_inにリストとしてappendしていく。
-    # for文で、インスタンス化を繰り返し処理する。
     with open("item.csv","r",encoding="Shift-JIS") as lists:
         header=next(csv.reader(lists))
         for list in csv.reader(lists):
@@ -87,7 +100,7 @@ def main():
     order=Order(item_masters)
     order.add_order_list()
     order.pay_total_money()
-
+    order.print_receipt()
     
 if __name__ == "__main__":
     main()
